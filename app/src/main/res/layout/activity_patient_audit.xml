@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.PatientAudit"
+    android:orientation="vertical">
+    <Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue_100">
+        <TextView
+            android:id="@+id/audit_title"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="Add Patient"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:gravity="left|center_vertical"/>
+    </Toolbar>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Patient's Name"
+        android:padding="8dp"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/blue_200">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_patient_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Machine Number"
+        android:padding="8dp"
+        app:hintTextColor="@color/black"
+        app:boxStrokeColor="@color/blue_200">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_machine_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center|bottom">
+        <TextView
+            android:id="@+id/finish_audit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="+"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_blue_back"
+            android:paddingHorizontal="64dp"
+            android:layout_marginBottom="32dp"/>
+    </RelativeLayout>
+</LinearLayout>
+

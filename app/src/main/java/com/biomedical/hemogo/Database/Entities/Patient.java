@@ -1,4 +1,4 @@
-package com.biomedical.hemogo.Models;
+package com.biomedical.hemogo.Database.Entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

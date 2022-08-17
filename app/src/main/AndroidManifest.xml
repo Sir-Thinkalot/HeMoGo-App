@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.biomedical.hemogo">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
-        <activity android:name=".Activities.RegisterActivity"></activity>
+        <activity android:name=".Activities.MqttTestActivity"></activity>
+        <activity
+            android:name=".Activities.PatientDetailActivity"
+            android:theme="@style/Theme.HeMoGo" />
+        <activity
+            android:name=".Activities.PatientAudit"
+            android:theme="@style/Theme.HeMoGo" />
+        <activity
+            android:name=".Activities.RegisterActivity"
+            android:theme="@style/Theme.HeMoGo" />
 
         <service
             android:name=".Services.MQTTService"
@@ -22,6 +31,7 @@
             android:exported="true" />
 
         <activity android:name=".Activities.LoginActivity">
+            android:theme="@style/Theme.HeMoGo"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +41,9 @@
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
 
-        <activity android:name=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.MainActivity"
+            android:theme="@style/Theme.HeMoGo" />
     </application>
 
 </manifest>

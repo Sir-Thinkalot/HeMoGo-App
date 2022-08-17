@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HeMoGo</string>
+    <string name="confirm_dialog_message">Are you sure you want to remove this patient?</string>
+    <string name="confirm_dialog_title">Remove Patient</string>
 </resources>

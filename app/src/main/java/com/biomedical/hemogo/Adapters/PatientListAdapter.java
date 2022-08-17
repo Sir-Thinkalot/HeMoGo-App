@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.biomedical.hemogo.Models.Patient;
+import com.biomedical.hemogo.Database.Entities.Patient;
 import com.biomedical.hemogo.Interfaces.PatientCardClickListener;
 import com.biomedical.hemogo.R;
 

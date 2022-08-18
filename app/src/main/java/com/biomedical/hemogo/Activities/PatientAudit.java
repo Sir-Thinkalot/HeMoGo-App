@@ -23,7 +23,7 @@ public class PatientAudit extends AppCompatActivity {
     ArrayList<Integer> patientIDs;
     boolean flag;
     User user;
-
+//TODO: IF PATIENT EXIST THEN GET PATIENT INSTEAD FROM DB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

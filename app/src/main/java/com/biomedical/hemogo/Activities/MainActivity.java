@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     private void updateRecycler(List<Patient> patients) {
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, LinearLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL));
 
         patientListAdapter = new PatientListAdapter(MainActivity.this,patients,patientCardClickListener);
         recyclerView.setAdapter(patientListAdapter);
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private final PatientCardClickListener patientCardClickListener = new PatientCardClickListener() {
         @Override
         public void onClick(Patient patient) {
-            Intent intent = new Intent(MainActivity.this,MqttTestActivity.class);
+            Intent intent = new Intent(MainActivity.this,PatientDetailActivity.class);
             intent.putExtra("Patient",patient);
             startActivity(intent);
         }

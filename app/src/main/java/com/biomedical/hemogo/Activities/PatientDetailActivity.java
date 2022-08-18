@@ -79,9 +79,9 @@ public class PatientDetailActivity extends AppCompatActivity {
         patient_name.setText(patient.getPatientName());
         machine_number.setText(patient.getMachineNumber());
 
-//        aPress_bar.setProgress(Math.round(data.getLastDatum(data.getArterialPressure())*10));
-//        vPress_bar.setProgress(Math.round(data.getLastDatum(data.getVenousPressure())*10));
-//        dPress_bar.setProgress(Math.round(data.getLastDatum(data.getDialysatePressure())*10));
+        aPress_bar.setProgress(Math.round(data.getLastDatum(data.getArterialPressure())*10));
+        vPress_bar.setProgress(Math.round(data.getLastDatum(data.getVenousPressure())*10));
+        dPress_bar.setProgress(Math.round(data.getLastDatum(data.getDialysatePressure())*10));
 
         aPress_val.setText(String.valueOf(data.getLastDatum(data.getArterialPressure())));
         vPress_val.setText(String.valueOf(data.getLastDatum(data.getVenousPressure())));

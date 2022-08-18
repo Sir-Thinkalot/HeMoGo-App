@@ -128,22 +128,21 @@ public class MQTTService extends Service {
 
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
-                if(topic.equals("MACNUM")){
-                    macnum = message.getPayload().toString();
-                    data = database.mainDAO().getData(macnum);
-                }
-                else if (topic.equals(macnum+"/DATA")){
-                    Intent intent = new Intent();
+                Intent intent = new Intent();
+                if (topic.matches("(.*)/DATA")){
                     intent.setAction("Data");
-                    intent.putExtra("Msg",message.getPayload().toString());
-                    sendBroadcast(intent);
                 }
-                else if (topic.equals(macnum+"/ALERT")){
-
+                else if (topic.matches("(.*)/ALERT")){
+                    intent.setAction("Alert");
                 }
-                else if (topic.equals(macnum+"START")){
-
+                else if (topic.matches("(.*)START")){
+                    intent.setAction("Start");
                 }
+                String msg = new String(message.getPayload());
+                intent.putExtra("Topic",topic);
+                intent.putExtra("Msg",msg);
+                sendBroadcast(intent);
+                Log.d("Message",topic+": "+msg);
             }
 
             @Override
@@ -214,6 +213,17 @@ public class MQTTService extends Service {
     public void sub(MqttAndroidClient client, String topic, int qos){
         try{
             subToken = client.subscribe(topic,qos);
+            subToken.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d("Subscribed",topic);
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Log.d("Sub Failed",topic);
+                }
+            });
         }catch (MqttException e){
             e.printStackTrace();
         }
@@ -222,7 +232,17 @@ public class MQTTService extends Service {
     public void unsub(MqttAndroidClient client, String topic){
         try {
             unsToken = client.unsubscribe(topic);
+            unsToken.setActionCallback(new IMqttActionListener() {
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    Log.d("Unsubscribed",topic);
+                }
 
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Log.d("Unsub Failed",topic);
+                }
+            });
         } catch (MqttException e) {
             e.printStackTrace();
         }

@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(getApplicationContext(),MQTTService.class);
                 intent2.putExtra("User",user);
                 startService(intent2);
-//                finish();
+                finish();
             }
             else Toast.makeText(LoginActivity.this, "Username or Password is Wrong", Toast.LENGTH_LONG).show();
         });
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonRegister.setOnClickListener(view -> {
             Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
             startActivity(intent);
-//            finish();
+            finish();
         });
 
 

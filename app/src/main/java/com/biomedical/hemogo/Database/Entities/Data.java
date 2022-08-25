@@ -1,6 +1,7 @@
 package com.biomedical.hemogo.Database.Entities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -20,46 +21,57 @@ public class Data implements Serializable {
     String machineNumber = "";
 
     @ColumnInfo(name = "timestamp")
+    @Nullable
     @TypeConverters(StringTypeConverters.class)
-    ArrayList<String> timestamp = new ArrayList<String>();
+    ArrayList<String> timestamp;
 
     @ColumnInfo(name = "ufrate")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
-    ArrayList<Float> ufRate = new ArrayList<Float>();
+    ArrayList<Float> ufRate;
 
     @ColumnInfo(name = "ufremove")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> ufRemove = new ArrayList<Float>();
 
     @ColumnInfo(name = "apress")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> arterialPressure = new ArrayList<Float>();
 
     @ColumnInfo(name = "vpress")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> venousPressure = new ArrayList<Float>();
 
     @ColumnInfo(name = "dpress")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> dialysatePressure = new ArrayList<Float>();
 
     @ColumnInfo(name = "dtemp")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> dialysateTemperature = new ArrayList<Float>();
 
     @ColumnInfo(name = "dcond")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> dialysateConductivity = new ArrayList<Float>();
 
     @ColumnInfo(name = "dflow")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> dialysateFlowRate = new ArrayList<Float>();
 
     @ColumnInfo(name = "hflow")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> heparinFlowRate = new ArrayList<Float>();
 
     @ColumnInfo(name = "bflow")
+    @Nullable
     @TypeConverters(FloatTypeConverters.class)
     ArrayList<Float> bloodFlowRate = new ArrayList<Float>();
 

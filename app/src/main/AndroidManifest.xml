@@ -14,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
-        <activity android:name=".Activities.MqttTestActivity"></activity>
+        <activity
+            android:name=".Activities.MqttLogActivity"
+            android:theme="@style/Theme.HeMoGo" ></activity>
         <activity
             android:name=".Activities.PatientDetailActivity"
             android:theme="@style/Theme.HeMoGo" />

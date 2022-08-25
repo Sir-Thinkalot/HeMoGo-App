@@ -14,6 +14,8 @@ import com.biomedical.hemogo.Database.Entities.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.room.OnConflictStrategy.ABORT;
+import static androidx.room.OnConflictStrategy.FAIL;
 import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
@@ -33,9 +35,20 @@ public interface MainDAO {
     @Query("SELECT * FROM patient WHERE ID IN (:UserID) ORDER BY id ASC")
     List<Patient> getPatients(List<Integer> UserID);
 
+    @Query("SELECT uname FROM user ORDER BY ID ASC")
+    List<String> getAllUsername();
+
+    @Query("SELECT mail FROM user ORDER BY ID ASC")
+    List<String> getAllMails();
+
+    @Query("SELECT * FROM patient ORDER BY id ASC")
+    List<Patient> getAllPatients();
 
     @Query("SELECT ID FROM patient WHERE name = :na AND machine = :mn")
     int getPatientID(String na, String mn);
+
+    @Query("SELECT * FROM patient WHERE name = :na AND machine = :mn")
+    Patient getPatient(String na,String mn);
 
     @Query("UPDATE patient SET name = :name, machine =:macnum WHERE ID = :id")
     void update(int id, String name, String macnum);

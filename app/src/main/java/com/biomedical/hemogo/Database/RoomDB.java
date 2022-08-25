@@ -21,7 +21,7 @@ import com.biomedical.hemogo.Database.Entities.User;
         Patient.class,
         Data.class,
         Alerts.class},
-        version = 7, exportSchema = false)
+        version = 9, exportSchema = false)
 
 @TypeConverters({
         IntTypeConverters.class,

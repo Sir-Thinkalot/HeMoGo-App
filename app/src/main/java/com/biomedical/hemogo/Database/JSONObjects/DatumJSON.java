@@ -7,10 +7,10 @@ import java.util.ArrayList;
 public class DatumJSON {
 
     ArrayList<Float> UF = new ArrayList<>();
-    ArrayList<Float> Press = new ArrayList<>();
-    Float Temp = Float.valueOf(0);
-    Float Cond = Float.valueOf(0);
-    ArrayList<Float> Flow = new ArrayList<>();
+    ArrayList<Float> PRESS = new ArrayList<>();
+    Float TEMP = Float.valueOf(0);
+    Float EC = Float.valueOf(0);
+    Float FLOW = Float.valueOf(0);
 
     public ArrayList<Float> getUF() {
         return UF;
@@ -20,36 +20,36 @@ public class DatumJSON {
         this.UF = UF;
     }
 
-    public ArrayList<Float> getPress() {
-        return Press;
+    public ArrayList<Float> getPRESS() {
+        return PRESS;
     }
 
-    public void setPress(ArrayList<Float> press) {
-        Press = press;
+    public void setPRESS(ArrayList<Float> PRESS) {
+        this.PRESS = PRESS;
     }
 
-    public Float getTemp() {
-        return Temp;
+    public Float getTEMP() {
+        return TEMP;
     }
 
-    public void setTemp(Float temp) {
-        Temp = temp;
+    public void setTEMP(Float TEMP) {
+        this.TEMP = TEMP;
     }
 
-    public Float getCond() {
-        return Cond;
+    public Float getEC() {
+        return EC;
     }
 
-    public void setCond(Float cond) {
-        Cond = cond;
+    public void setEC(Float EC) {
+        this.EC = EC;
     }
 
-    public ArrayList<Float> getFlow() {
-        return Flow;
+    public Float getFLOW() {
+        return FLOW;
     }
 
-    public void setFlow(ArrayList<Float> flow) {
-        Flow = flow;
+    public void setFLOW(Float FLOW) {
+        this.FLOW = FLOW;
     }
 }
 

@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ import com.biomedical.hemogo.Database.Entities.User;
 import com.biomedical.hemogo.Database.RoomDB;
 import com.biomedical.hemogo.Interfaces.PatientCardClickListener;
 import com.biomedical.hemogo.R;
+import com.biomedical.hemogo.Services.MQTTService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     FloatingActionButton fab_patient;
     RoomDB database;
     List<Patient> patients = new ArrayList<>();
-    List<Integer> patientIDs = new ArrayList<>();
+    ArrayList<Integer> patientIDs = new ArrayList<>();
     PatientListAdapter patientListAdapter;
     Patient selectedPatient;
     User user;
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         setTheme(R.style.Theme_HeMoGo);
         setContentView(R.layout.activity_main);
 
+        LinearLayout homeprofile = findViewById(R.id.profile_home);
+
         user = (User) getIntent().getSerializableExtra("User");
         ID = user.getID();
         patientIDs = user.getPatientIDs();
@@ -91,6 +96,28 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             intent.putExtra("requestcode",101);
             intent.putExtra("user",user);
             activityResultLauncher.launch(intent);
+        });
+
+        homeprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this,findViewById(R.id.profile_pic));
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch(menuItem.getItemId()){
+                            case R.id.logout:
+                                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                                startActivity(intent);
+                                stopService(new Intent(getApplicationContext(),MQTTService.class));
+                                finish();
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.inflate(R.menu.profile_home_popup);
+                popupMenu.show();
+            }
         });
 
         database = RoomDB.getInstance(this);
@@ -164,7 +191,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 builder .setMessage(R.string.confirm_dialog_message)
                         .setTitle(R.string.confirm_dialog_title)
                         .setNegativeButton("Yes", (dialogInterface, i) -> {
-                            database.mainDAO().delete(selectedPatient);
+                            patientIDs.remove(Integer.valueOf(selectedPatient.getID()));
+                            database.mainDAO().updatePatientList(user.getID(),patientIDs);
                             patients = database.mainDAO().getPatients(patientIDs);
                             updateRecycler(patients);
                         })
@@ -181,7 +209,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 intent.putExtra("requestcode",102);
                 activityResultLauncher.launch(intent);
                 return true;
+
+            case R.id.patient_log:
+                startActivity(new Intent(MainActivity.this, MqttLogActivity.class));
+                return true;
         }
         return false;
     }
+
+
 }

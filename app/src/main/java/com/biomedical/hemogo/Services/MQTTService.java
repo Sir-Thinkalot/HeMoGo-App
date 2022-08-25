@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.biomedical.hemogo.Database.Converters.JSONConverters;
 import com.biomedical.hemogo.Database.Entities.Alerts;
 import com.biomedical.hemogo.Database.Entities.Data;
 import com.biomedical.hemogo.Database.Entities.Patient;
@@ -29,15 +30,21 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MQTTService extends Service {
     RoomDB database;
     MqttAndroidClient client;
     IMqttToken conToken, disToken, unsToken, subToken, pubToken;
     Patient patient;
+    List<Patient> patients = new ArrayList<>();
     DatumJSON datum;
     Data data;
-    String macnum, Top1, Top2, Top3;
+    String macnum, topics;
     Alerts alerts;
+    JSONConverters convert;
+    User user;
 
     public MQTTService() {
     }
@@ -59,12 +66,11 @@ public class MQTTService extends Service {
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals("SetSub")){
                 patient = (Patient) intent.getSerializableExtra("Patient");
-                String topic = patient.getMachineNumber();
                 if (intent.getBooleanExtra("Sub",false)) {
-                    start(topic);
+                    start(patient);
                 }
                 else {
-                    stop(topic);
+                    stop(patient);
                 }
             }
         }
@@ -78,45 +84,11 @@ public class MQTTService extends Service {
         mReceiver receiver = new mReceiver();
         IntentFilter intentFilter = new IntentFilter("SetSub");
         this.registerReceiver(receiver,intentFilter);
-
-
-
-//        subToken.setActionCallback(new IMqttActionListener() {
-//            @Override
-//            public void onSuccess(IMqttToken asyncActionToken) {
-//                Log.d("Client Service", "Subscribe Success");
-//            }
-//
-//            @Override
-//            public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
-//            }
-//        });
-//        unsToken.setActionCallback(new IMqttActionListener() {
-//            @Override
-//            public void onSuccess(IMqttToken asyncActionToken) {
-//            }
-//
-//            @Override
-//            public void onFailure(IMqttToken asyncActionToken,
-//                                  Throwable exception) {
-//            }
-//        });
-//        pubToken.setActionCallback(new IMqttActionListener() {
-//            @Override
-//            public void onSuccess(IMqttToken asyncActionToken) {
-//            }
-//
-//            @Override
-//            public void onFailure(IMqttToken asyncActionToken,
-//                                  Throwable exception) {
-//            }
-//        });
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        User user = (User) intent.getSerializableExtra("User");
+        user = (User) intent.getSerializableExtra("User");
         String clientID = MqttClient.generateClientId();
         String url = user.getBrokerURL() + ":" + user.getPort();
         client = new MqttAndroidClient(getApplicationContext(),url,clientID);
@@ -131,18 +103,50 @@ public class MQTTService extends Service {
                 Intent intent = new Intent();
                 if (topic.matches("(.*)/DATA")){
                     intent.setAction("Data");
+//                    Log.d("Data",new String(message.getPayload()));
+//                    topics = topic;
+//                    data = database.mainDAO().getData(topics.replace("/DATA",""));
+//                    Log.d("Macnum",data.getMachineNumber());
+//                    DatumJSON json = convert.jsonToDatum(new String(message.getPayload()));
+//                    data.appendDatum(data.getArterialPressure()     ,json.getPress().get(0));
+//                    data.appendDatum(data.getVenousPressure()       ,json.getPress().get(1));
+//                    data.appendDatum(data.getDialysatePressure()    ,json.getPress().get(2));
+//
+//                    data.appendDatum(data.getUfRate()               ,json.getUF().get(0));
+//                    data.appendDatum(data.getUfRemove()             ,json.getUF().get(1));
+//
+//                    data.appendDatum(data.getDialysateTemperature() ,json.getTemp());
+//                    data.appendDatum(data.getDialysateConductivity(),json.getCond());
+//                    data.appendDatum(data.getDialysateFlowRate()    ,json.getFlow().get(0));
+//                    data.appendDatum(data.getHeparinFlowRate()      ,json.getFlow().get(1));
+//                    data.appendDatum(data.getBloodFlowRate()        ,json.getFlow().get(2));
+//                    database.mainDAO().update(
+//                            data.getMachineNumber(),
+//                            new ArrayList<>(),
+//                            data.getUfRate(),
+//                            data.getUfRemove(),
+//                            data.getArterialPressure(),
+//                            data.getVenousPressure(),
+//                            data.getDialysatePressure(),
+//                            data.getDialysateConductivity(),
+//                            data.getDialysateFlowRate(),
+//                            data.getDialysateTemperature(),
+//                            data.getBloodFlowRate(),
+//                            data.getHeparinFlowRate()
+//                    );
                 }
                 else if (topic.matches("(.*)/ALERT")){
                     intent.setAction("Alert");
                 }
-                else if (topic.matches("(.*)START")){
+                else if (topic.matches("(.*)/START")){
                     intent.setAction("Start");
                 }
                 String msg = new String(message.getPayload());
+                Log.d("Message",topic+": "+msg);
                 intent.putExtra("Topic",topic);
                 intent.putExtra("Msg",msg);
+                intent.putExtra("Data",data);
                 sendBroadcast(intent);
-                Log.d("Message",topic+": "+msg);
             }
 
             @Override
@@ -168,6 +172,13 @@ public class MQTTService extends Service {
                 public void onSuccess(IMqttToken asyncActionToken) {
                     Toast.makeText(getApplicationContext(),"Connection success!!",Toast.LENGTH_SHORT).show();
 //                    TODO : Subscribe to all previously subscribed topics
+                    patients = database.mainDAO().getPatients(user.getPatientIDs());
+                    for (int i = 0; i < patients.size(); i++) {
+                        if (patients.get(i).getConnection_status()){
+                            start(patients.get(i));
+                        }
+                        Log.d("Macnum",patients.get(i).getMachineNumber());
+                    }
                 }
 
                 @Override
@@ -216,7 +227,7 @@ public class MQTTService extends Service {
             subToken.setActionCallback(new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken asyncActionToken) {
-                    Log.d("Subscribed",topic);
+                    Log.d("Subscribed",topic+" qos = "+qos);
                 }
 
                 @Override
@@ -248,9 +259,9 @@ public class MQTTService extends Service {
         }
     }
 
-    public void start(String macnum){
+    public void start(Patient patient){
         try{
-            sub(client,"MACNUM",2);
+            String macnum = patient.getMachineNumber();
             sub(client,macnum+"/DATA",0);
             sub(client,macnum+"/ALERT",2);
             sub(client,macnum+"/START",2);
@@ -262,9 +273,9 @@ public class MQTTService extends Service {
         }
     }
 
-    public void stop(String macnum){
+    public void stop(Patient patient){
         try{
-            unsub(client,"MACNUM");
+            String macnum = patient.getMachineNumber();
             unsub(client,macnum+"/DATA");
             unsub(client,macnum+"/ALERT");
             unsub(client,macnum+"/START");
@@ -275,5 +286,6 @@ public class MQTTService extends Service {
             update();
         }
     }
+
 
 }

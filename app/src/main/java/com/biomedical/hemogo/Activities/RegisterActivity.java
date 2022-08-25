@@ -6,11 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.biomedical.hemogo.Database.Entities.User;
 import com.biomedical.hemogo.Database.RoomDB;
 import com.biomedical.hemogo.R;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -18,6 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText uname, mail, pass, cpass, url, port;
     RoomDB database;
     User user;
+    List<String> usernames, mails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         database = RoomDB.getInstance(RegisterActivity.this);
-
+        usernames = database.mainDAO().getAllUsername();
+        mails = database.mainDAO().getAllMails();
         uname = findViewById(R.id.edit_uname);
         mail = findViewById(R.id.edit_email);
         pass = findViewById(R.id.edit_password);
@@ -45,12 +52,24 @@ public class RegisterActivity extends AppCompatActivity {
                     user.setPassword(pass.getText().toString());
                     user.setBrokerURL(url.getText().toString());
                     user.setPort(Integer.parseInt(port.getText().toString()));
-                    database.mainDAO().insert(user);
-                    Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (usernames.contains(uname.getText().toString())){
+                        Toast.makeText(RegisterActivity.this, "Username Already Exist", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    else if (mails.contains(mail.getText().toString())){
+                        Toast.makeText(RegisterActivity.this, "Email Already in Use", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    else{
+                        database.mainDAO().insert(user);
+                        Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
         });
     }
+
+
 }
